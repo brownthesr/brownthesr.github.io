@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWS Agentic Infrastructure — Drake Brown</title>
+  <meta name="description" content="Intelligent orchestration systems for serverless compute, dynamic request routing, and adversarial traffic isolation at AWS.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>∂</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body class="project-page">
+
+  <nav class="project-nav">
+    <a href="../index.html#projects" class="back-link">&larr; Back to Portfolio</a>
+    <span class="project-nav__title">AWS Agentic</span>
+  </nav>
+
+  <!-- Hero -->
+  <section class="project-hero">
+    <div class="canvas-placeholder canvas-placeholder--full" aria-hidden="true">
+      <canvas data-canvas-id="aws-hero"></canvas>
+    </div>
+    <div class="project-hero__overlay">
+      <h1>AWS Agentic Infrastructure</h1>
+      <p class="project-hero__tagline">Intelligent orchestration for serverless compute, dynamic routing, and adversarial traffic isolation.</p>
+    </div>
+  </section>
+
+  <!-- Intuition -->
+  <section class="project-section project-section--intuition reveal">
+    <div class="project-section__grid">
+      <div class="project-section__text">
+        <h2>Intuition</h2>
+        <p>Modern cloud infrastructure handles millions of API requests per second. Each request must be routed to the right compute resource, balanced across regions, and protected from adversarial traffic — all in real time.</p>
+        <p>We designed agentic systems that make intelligent routing decisions: isolating potentially harmful traffic patterns, dynamically scaling resources based on predicted demand, and orchestrating complex multi-service workflows without human intervention.</p>
+        <p>The system treats infrastructure management as a sequential decision problem, where agents learn policies that optimize for latency, cost, and reliability simultaneously.</p>
+      </div>
+      <div class="project-section__visual">
+        <div class="canvas-placeholder" aria-hidden="true">
+          <canvas data-canvas-id="aws-intuition"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture -->
+  <section class="project-section project-section--math reveal">
+    <div class="equation-card">
+      <div class="equation-card__inner">
+        <div class="equation-card__canvas">
+          <div class="canvas-placeholder" aria-hidden="true">
+            <canvas data-canvas-id="aws-architecture"></canvas>
+          </div>
+        </div>
+        <div class="equation-card__content">
+          <h2>Architecture</h2>
+          <div class="equation-block">
+            $$\text{Agent: observe(traffic)} \rightarrow \text{decide(route)} \rightarrow \text{act(scale)}$$
+          </div>
+          <div class="equation-block">
+            $$\pi(a \mid s) = \arg\max_a Q(s, a;\, \theta)$$
+          </div>
+          <div class="equation-block">
+            $$R = -\bigl(\alpha \cdot \text{latency} + \beta \cdot \text{cost} + \gamma \cdot \text{errors}\bigr)$$
+          </div>
+          <p>The orchestration agent observes traffic patterns and system state. A learned policy selects routing and scaling actions. The reward signal balances multiple operational objectives to maintain service-level agreements.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section class="project-section project-section--results reveal">
+    <div class="results-container">
+      <h2>Results</h2>
+      <div class="results-comparison">
+        <div class="canvas-placeholder" aria-hidden="true">
+          <canvas data-canvas-id="aws-results"></canvas>
+        </div>
+      </div>
+      <div class="slider-controls">
+        <div class="slider-group">
+          <label>Traffic load</label>
+          <input type="range" min="0" max="100" value="60">
+        </div>
+        <div class="slider-group">
+          <label>Adversarial %</label>
+          <input type="range" min="0" max="100" value="15">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why It Matters -->
+  <section class="project-section project-section--impact reveal">
+    <div class="impact-container">
+      <h2>Why It Matters</h2>
+      <div class="impact-grid">
+        <div class="impact-item">Autoscaling</div>
+        <div class="impact-item">Traffic isolation</div>
+        <div class="impact-item">Cost optimization</div>
+        <div class="impact-item">Latency reduction</div>
+        <div class="impact-item">Fault tolerance</div>
+        <div class="impact-item">Multi-region orchestration</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Links -->
+  <section class="project-section project-section--links reveal">
+    <div class="links-container">
+      <h2>Resources</h2>
+      <div class="link-grid">
+        <a href="#" class="link-card">Internal Design Doc</a>
+        <a href="#" class="link-card">Architecture Diagram</a>
+        <a href="#" class="link-card">Presentation</a>
+      </div>
+    </div>
+  </section>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generative Modeling via Drift Dynamics — Drake Brown</title>
+  <meta name="description" content="Methods for accelerating convergence of drifting generative models with theoretical guarantees.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>∂</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body class="project-page">
+
+  <nav class="project-nav">
+    <a href="../index.html#projects" class="back-link">&larr; Back to Portfolio</a>
+    <span class="project-nav__title">Generative Drift</span>
+  </nav>
+
+  <!-- Hero -->
+  <section class="project-hero">
+    <div class="canvas-placeholder canvas-placeholder--full" aria-hidden="true">
+      <canvas data-canvas-id="drift-hero"></canvas>
+    </div>
+    <div class="project-hero__overlay">
+      <h1>Accelerated Training for Drifting Models</h1>
+      <p class="project-hero__tagline">Faster convergence and stronger performance for drifting generative models, with theoretical guarantees.</p>
+    </div>
+  </section>
+
+  <!-- Intuition -->
+  <section class="project-section project-section--intuition reveal">
+    <div class="project-section__grid">
+      <div class="project-section__text">
+        <h2>Intuition</h2>
+        <p><strong>Goal:</strong> train a generator that maps Gaussian noise directly to data samples in a single forward pass, instead of the many small denoising steps used by diffusion or flow-matching models &mdash; and do so with faster, more reliable training and provable convergence.</p>
+        <p>We learn a one-step generative model by training representations to approach a fixed point of a learned update map. Each iterate is pulled toward — or pushed away from — other representations through a similarity / dissimilarity map, so that at convergence the representation sits at a stable fixed point that encodes the data manifold.</p>
+        <!--
+        <p>Naively, standard training of this fixed-point objective is slow: the conditioning of the iteration is set by the spectrum of the update map, and many local optima trap gradient descent. We exploit additional structure in the iteration to make representations converge fast during training and to settle at better local optima.</p>
+        <p>The result is a one-step generator with accelerated training dynamics and provable convergence guarantees under standard regularity assumptions.</p>
+        -->
+        <!-- <p class="muted"><em>Additional experimental details are withheld during double-blind review.</em></p> -->
+      </div>
+      <div class="project-section__visual">
+        <!--
+        <div class="canvas-placeholder" aria-hidden="true">
+          <canvas data-canvas-id="drift-landscape"></canvas>
+        </div>
+        <p class="caption muted" style="text-align:center;font-size:0.85em;margin-top:0.5em;">
+          A non-convex loss landscape: many local minima, one global minimum. Exploiting structure helps optimizers see past local traps.
+        </p>
+        -->
+        <div class="canvas-placeholder" aria-hidden="true">
+          <canvas data-canvas-id="drift-onestep-vs-multistep"></canvas>
+        </div>
+        <p class="caption muted" style="text-align:center;font-size:0.85em;margin-top:0.5em;">
+          Multi-step generators iteratively transport noise to data through many small updates. A one-step generator collapses the entire trajectory into a single learned map.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mathematics -->
+  <section class="project-section project-section--math reveal">
+    <div class="equation-card">
+      <div class="equation-card__inner">
+        <div class="equation-card__canvas">
+          <div class="canvas-placeholder" aria-hidden="true">
+            <canvas data-canvas-id="drift-vectorfield"></canvas>
+          </div>
+        </div>
+        <div class="equation-card__content">
+          <h2>Mathematics</h2>
+          <div class="equation-block">
+            $$\epsilon_k \sim \mathcal{N}(0, I), \qquad x_k = f_\theta(\epsilon_k)$$
+          </div>
+          <div class="equation-block">
+            $$x_{k+1} = x_k + V(x_k, p)$$
+          </div>
+          <div class="equation-block">
+            $$\mathcal{L}(\theta) \;=\; \bigl\| f_\theta(\epsilon) \;-\; \mathrm{sg}\!\left[\, f_\theta(\epsilon) + V\bigl(f_\theta(\epsilon), p\bigr) \,\right] \bigr\|^2$$
+          </div>
+          <p>$f_\theta$ is a parameterized one-step transport map: it pushes a Gaussian sample $\epsilon \sim \mathcal{N}(0, I)$ directly to a representation $x = f_\theta(\epsilon)$. The similarity / dissimilarity map $V(\cdot, p)$ defines the fixed-point iteration the representations should converge under. The training loss matches $f_\theta(\epsilon)$ to its image one step further along the iteration, with a stop-gradient on the target so the network learns to <em>be</em> the fixed point rather than chase a moving one. Exploiting additional structure in $V$ accelerates this convergence and steers the iterates toward better local optima, with guarantees under standard regularity conditions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section class="project-section project-section--results reveal">
+    <div class="results-container">
+      <h2>Results</h2>
+      <p class="muted"><em>Note: Model specifications and experimental details are excluded until after paper decisions.</em></p>
+      <div class="results-comparison">
+        <div class="canvas-placeholder" aria-hidden="true">
+          <canvas data-canvas-id="drift-results"></canvas>
+        </div>
+      </div>
+      <!-- <p class="muted"><em>Quantitative benchmarks and ablations are withheld during double-blind review. The method consistently reaches target loss levels in fewer iterations than standard baselines and improves terminal sample quality.</em></p> -->
+    </div>
+  </section>
+
+  <!-- Why It Matters -->
+  <section class="project-section project-section--impact reveal">
+    <div class="impact-container">
+      <h2>Why It Matters</h2>
+      <div class="impact-grid">
+        <div class="impact-item">Faster training of drifting models</div>
+        <div class="impact-item">Provable convergence guarantees</div>
+        <div class="impact-item">Improved sample quality</div>
+        <div class="impact-item">Structure-aware optimization</div>
+        <div class="impact-item">Scalable update rules</div>
+        <div class="impact-item">Stronger theoretical grounding</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Links -->
+  <section class="project-section project-section--links reveal">
+    <div class="links-container">
+      <h2>Resources</h2>
+      <div class="link-grid">
+        <!-- <a href="#" class="link-card">Paper</a> -->
+        <!-- <a href="#" class="link-card">arXiv</a> -->
+        <a href="#" class="link-card">Code</a>
+        <!-- <a href="#" class="link-card">Poster</a> -->
+        <!-- <a href="#" class="link-card">Slides</a> -->
+      </div>
+    </div>
+  </section>
+
+  <script src="../js/main.js"></script>
+  <!-- <script src="../js/project-drift-landscape.js"></script> -->
+  <script src="../js/project-drift-onestep-vs-multistep.js"></script>
+  <script src="../js/project-drift-vectorfield.js"></script>
+</body>
+</html>

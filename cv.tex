@@ -1,0 +1,216 @@
+% (c) 2002 Matthew Boedicker <mboedick@mboedick.org> (original author) http://mboedick.org
+% (c) 2003-2007 David J. Grant <davidgrant-at-gmail.com> http://www.davidgrant.ca
+% (c) 2008 Nathaniel Johnston <nathaniel@nathanieljohnston.com> http://www.nathanieljohnston.com
+%
+% This work is licensed under the Creative Commons Attribution-Noncommercial-Share Alike 2.5 License.
+% Modified by Zach Boyd. Further modified by Drake Brown.
+
+\documentclass[letterpaper,11pt]{article}
+\newlength{\outerbordwidth}
+\pagestyle{empty}
+\raggedbottom
+\raggedright
+\usepackage{etaremune}
+\usepackage[svgnames]{xcolor}
+\usepackage{framed}
+\usepackage{tocloft}
+\usepackage{etoolbox}
+\usepackage{tabularx}
+\usepackage{textcomp}
+\newcommand{\textapprox}{\raisebox{0.5ex}{\texttildelow}}
+\usepackage{url}
+\robustify\cftdotfill
+
+%-----------------------------------------------------------
+\setlength{\outerbordwidth}{3pt}
+\definecolor{shadecolor}{gray}{0.75}
+\definecolor{shadecolorB}{gray}{0.93}
+
+%-----------------------------------------------------------
+\setlength{\evensidemargin}{-0.25in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+\setlength{\oddsidemargin}{-0.25in}
+\setlength{\paperheight}{11in}
+\setlength{\paperwidth}{8.5in}
+\setlength{\tabcolsep}{0in}
+\setlength{\textheight}{9.5in}
+\setlength{\textwidth}{7in}
+\setlength{\topmargin}{-0.3in}
+\setlength{\topskip}{0in}
+\setlength{\voffset}{0.1in}
+
+%-----------------------------------------------------------
+\newcommand{\resitem}[1]{\item #1 \vspace{-2pt}}
+\newcommand{\resheading}[1]{\vspace{8pt}
+  \parbox{\textwidth}{\setlength{\FrameSep}{\outerbordwidth}
+    \begin{shaded}
+      \setlength{\fboxsep}{0pt}\framebox[\textwidth][l]{\setlength{\fboxsep}{4pt}\fcolorbox{shadecolorB}{shadecolorB}{\textbf{\sffamily{\mbox{~}\makebox[6.762in][l]{\large #1} \vphantom{p\^{E}}}}}}
+    \end{shaded}
+  }\vspace{-5pt}
+}
+\newcommand{\ressubheading}[3]{
+  \begin{tabular*}{6.5in}{l@{\cftdotfill{\cftsecdotsep}\extracolsep{\fill}}r}
+    \textbf{#1} & \textit{#3} \\
+  \end{tabular*}
+  \begin{tabular*}{6.5in}{l@{\cftdotfill{\cftsecdotsep}\extracolsep{\fill}}r}
+    \textit{#2} & \\
+\end{tabular*}}
+%-----------------------------------------------------------
+
+\begin{document}
+
+\begin{tabular*}{7in}{l@{\extracolsep{\fill}}r}
+  \textbf{\Large Drake B. Brown} & u1221123@umail.utah.edu \\
+  PhD Student, Applied Mathematics & https://github.com/brownthesr \\
+  Department of Mathematics & https://scholar.google.com/citations?user=BEqMd74AAAAJ \\
+  University of Utah & \\
+  2025 to present & \\
+\end{tabular*}
+\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\resheading{Education}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+
+  \item
+    \ressubheading{University of Utah}{Ph.D., Applied Mathematics}{2025--2029 (projected)}
+    GPA 4.00 \\
+    Advisor: Bao Wang \\
+    Qualifying Exam Topics: ODEs, PDEs, Linear Models, Functional Analysis, Numerical Analysis
+
+  \item
+    \ressubheading{Brigham Young University}{B.S., Applied \& Computational Mathematics (ACME), CS Minor}{2021--2025}
+    Major GPA 4.00 \\
+    Concentration: Deep Learning \\
+    Merit-based department scholarship \\
+    Undergraduate Advisor: Zachary M. Boyd
+
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\resheading{Primary Research Interests}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+    \item Generative modeling: flow matching, diffusion, score-based models, one-step generators, and steering pretrained generators via MCMC
+    \item Geometric and equivariant deep learning; Neural ODEs for physical dynamical systems
+    \item Graph neural networks: theory, expressivity, and equation-free methods on dynamic graphs
+    \item Agentic systems: multi-agent dynamics, adversarial robustness, and Agent-as-a-Judge evaluation
+    \item Optimal control and multi-agent coordination
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\resheading{Publications}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{enumerate}
+    \item \textbf{D. Brown}, T. Garrity, K. Parker, J. Oliphant, S. Carson, C. Hanson, Z. Boyd. ``Beyond Linear: A Theoretical and Empirical Analysis of Nonlinear GNNs for Community Detection.'' \textit{SIAM Journal on Applied Mathematics}, in press (2026). \textbf{First author.}
+    \item S. H. Wang, J. Keller, T. Transue, D. B. Brown, T. Strohmer, B. Wang. ``Test-Time Guidance for Flow-Based Generative Models via Parallel Tempering on Source Distributions.'' \textit{International Conference on Machine Learning (ICML)}, 2026. Accepted.
+    \item \textbf{D. Brown}, T. Garrity, D. Perkins, D. Hunter, W. Pochman. ``Optimal Control Strategies for Multi-Agent Sheep Herding.'' arXiv:2510.25115, 2025. \textbf{First author.}
+    \item \textbf{D. Brown}, D. Perkins, D. Hunter, T. Garrity, W. Pochman. ``Explorations of Epidemiological Dynamics across Multiple Population Hubs.'' arXiv:2510.25085, 2025. \textbf{First author.}
+    \item Manuscript under review at \textit{NeurIPS} 2026.
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\resheading{Research Experience}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+    \item \ressubheading{Ph.D. Researcher}{University of Utah, Department of Mathematics}{2025--present}
+    \begin{itemize}
+        \item Accelerated training methods for one-step generative models with provable convergence guarantees
+        \item Test-time steering of pretrained flow-based generators via parallel-tempering MCMC over source latents
+        \item Equivariant Neural ODEs for chaotic gravitational dynamics (three-body problem)
+    \end{itemize}
+
+    \item \ressubheading{Lead Research Assistant}{Graph Neural Networks Lab, BYU}{2022--2025}
+    \begin{itemize}
+        \item Theoretical and empirical analysis of nonlinear GNNs for community detection (\textit{SIAM J. Appl. Math.})
+        \item Equation-free graph neural networks for forecasting epidemic dynamics on adaptive contact networks
+        \item Led parallel experimentation training 200+ GNN models, generating 15M+ data points (PyTorch)
+    \end{itemize}
+
+    \item \ressubheading{Computer Vision Research Intern}{Air Force Research Laboratory}{Summer 2023}
+    \begin{itemize}
+        \item Implemented momentum-based self-supervised vision models (BYOL, DINO) in PyTorch
+        \item Outperformed state-of-the-art on STL-10 and CIFAR-100 by 4\% on linear-probe accuracy
+    \end{itemize}
+
+    \item \ressubheading{Research Assistant}{Perception, Cognition and Control Lab, BYU}{2022--2023}
+    \begin{itemize}
+        \item Probed what large language models encode about societal issues (inequality, racism) through generated narratives, using demographic-conditioned prompts to elicit first-person stories of observing or experiencing these phenomena
+        \item Built an analysis pipeline embedding generated stories with sentence transformers and clustering in latent space, surfacing underlying patterns in how models represent these issues across demographic groups
+    \end{itemize}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\resheading{Industry Experience}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+    \item \ressubheading{Applied Scientist Intern}{Kiro Science, AWS \textbullet{} Santa Clara, CA}{May--Aug 2026}
+    \begin{itemize}
+        \item Designing a self-improving multi-agent adversarial framework for measuring Agent-as-a-Judge robustness
+        \item Taxonomizing attack-class biases and evaluating cross-model judge vulnerability transfer
+    \end{itemize}
+
+    \item \ressubheading{Software Engineering Intern}{API Gateway, AWS \textbullet{} Denver, CO}{Jun--Aug 2024; May--Aug 2025}
+    \begin{itemize}
+        \item Re-architected Private API ingress by removing the NGINX proxy layer in favor of direct traffic handling in Protocol Service
+        \item Designed and deployed an isolation fleet to mitigate large-scale DDoS attacks across 300K+ accounts
+        \item Reduced p99 latency from 2000\,ms to 20\,ms under adversarial load; increased successful API transactions by 30\%
+    \end{itemize}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\resheading{Presentations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+    \item \textbf{Talks}
+    \begin{etaremune}
+        \item Connecting the Performance of Graph Neural Network Architectures to the Properties of Training Data, BYU Student Research Conference, February 2024.
+        \item (Invited) Connecting the Performance of Graph Neural Network Architectures to the Properties of Training Data, $2^{\text{nd}}$ SIAM Northern States Section Conference, April 2023.
+    \end{etaremune}
+    \item \textbf{Posters}
+    \begin{etaremune}
+        \item Test-Time Guidance for Flow-Based Generative Models via Parallel Tempering on Source Distributions, \textit{International Conference on Machine Learning (ICML)}, 2026.
+        \item Connecting the Performance of GNN Architectures to the Properties of Training Data, Northeast Regional Conference on Complex Systems, March 2023.
+    \end{etaremune}
+    \item \textbf{Accepted Abstracts}
+    \begin{etaremune}
+        \item Global Minima, Recoverability Thresholds, and Higher-Order Structure in GNNs, Conference on Complex Systems, October 2023.
+    \end{etaremune}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\resheading{Selected Coursework}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{tabularx}{6.5in}{XXX}
+    Advanced Deep Learning              & Stochastic Differential Equations  & Mathematics of Deep Learning \\
+    Linear \& Nonlinear Analysis        & Modeling with Uncertainty in Data  & Algorithm Design \& Optimization \\
+    Dynamics \& Control Theory          & Advanced Programming Concepts      & \\
+\end{tabularx}\vspace{4pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\resheading{Awards and Honors}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+    \item Math Department Dean's List, BYU (2021--2024)
+    \item Best Presentation Award, BYU Student Research Conference
+    \item Outstanding Sophomore, BYU Mathematics Department
+    \item Merit-based Department Scholarship, BYU Mathematics
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\resheading{Programming and Development}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+    \item \textbf{Languages:} Python, C++, Java, Rust, SQL, Bash, \LaTeX, Git
+    \item \textbf{Python Libraries:} PyTorch, PyTorch Lightning, PyTorch Geometric, NumPy, Pandas, NetworkX, Seaborn, Matplotlib
+    \item \textbf{Research Areas:} Geometric Deep Learning, Generative Models, Graph Neural Networks, Neural ODEs, Optimal Control, Numerical Linear Algebra
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\resheading{Citizenship}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+United States
+
+\end{document}

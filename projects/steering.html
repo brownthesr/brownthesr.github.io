@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Steering Generative Models — Drake Brown</title>
+  <meta name="description" content="Guidance vector fields that bend generative trajectories toward target manifolds and desired outputs.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>∂</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body class="project-page">
+
+  <nav class="project-nav">
+    <a href="../index.html#projects" class="back-link">&larr; Back to Portfolio</a>
+    <span class="project-nav__title">Steering</span>
+  </nav>
+
+  <!-- Hero -->
+  <section class="project-hero">
+    <div class="canvas-placeholder canvas-placeholder--full" aria-hidden="true">
+      <canvas data-canvas-id="steering-hero"></canvas>
+    </div>
+    <div class="project-hero__overlay">
+      <h1>Steering Generative Models</h1>
+      <p class="project-hero__tagline">Guidance vector fields that actively redirect generative trajectories toward target distributions.</p>
+    </div>
+  </section>
+
+  <!-- Intuition -->
+  <section class="project-section project-section--intuition reveal">
+    <div class="project-section__grid">
+      <div class="project-section__text">
+        <h2>Intuition</h2>
+        <p><strong>Goal:</strong> given a pretrained generative model and a reward function on its outputs, draw samples concentrated on high-reward outputs &mdash; without retraining or fine-tuning the generator.</p>
+        <p>Standard generative models produce samples by transporting noise through a fixed drift to data. But what if we want to steer generation toward a specific target — high-reward outputs, a constrained region, a desired class — without retraining the model?</p>
+        <p>We do <em>source steering</em>: instead of modifying the generator, we re-weight the noise inputs. We define a reward consistent with the steering target on the output space, then sample source latents in proportion to that reward. The key step is that evaluating the reward at any candidate source requires running the generator forward and scoring the resulting output distribution.</p>
+        <p>This reward landscape over the source is rugged and high-dimensional, so we use <strong>Parallel Tempering MCMC</strong>: a ladder of replicas at increasing temperatures explores the source space in parallel and swaps states across temperatures, letting cold chains escape local modes through their hotter neighbors.</p>
+      </div>
+      <div class="project-section__visual">
+        <div class="canvas-placeholder" aria-hidden="true">
+          <canvas data-canvas-id="steering-tempering"></canvas>
+        </div>
+        <p class="caption muted" style="text-align:center;font-size:0.85em;margin-top:0.5em;">
+          Parallel Tempering: replicas at increasing temperatures explore the rugged reward landscape over the source; cold chains lock into modes while hot chains tunnel between them, with periodic swaps mixing the ladder.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mathematics -->
+  <section class="project-section project-section--math reveal">
+    <div class="equation-card">
+      <div class="equation-card__inner">
+        <div class="equation-card__canvas">
+          <svg viewBox="0 0 460 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;" aria-label="Source steering diagram">
+            <defs>
+              <radialGradient id="src-bowl" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="rgba(160,170,185,0.32)"/>
+                <stop offset="100%" stop-color="rgba(160,170,185,0)"/>
+              </radialGradient>
+              <linearGradient id="reward-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="rgba(90,148,196,0.10)"/>
+                <stop offset="55%" stop-color="rgba(200,104,136,0.18)"/>
+                <stop offset="100%" stop-color="rgba(230,180,90,0.45)"/>
+              </linearGradient>
+              <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(122,112,96,0.85)"/>
+              </marker>
+              <marker id="arrow-gold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(230,180,90,0.95)"/>
+              </marker>
+            </defs>
+
+            <!-- Section labels -->
+            <text x="80" y="22" fill="#7a7060" font-size="12" font-family="Inter, sans-serif" text-anchor="middle" font-weight="600">source space ε</text>
+            <text x="380" y="22" fill="#7a7060" font-size="12" font-family="Inter, sans-serif" text-anchor="middle" font-weight="600">output space x</text>
+
+            <!-- Source panel (left): Gaussian prior bowl with replica samples -->
+            <circle cx="80" cy="150" r="92" fill="url(#src-bowl)" stroke="rgba(160,170,185,0.45)" stroke-width="1"/>
+            <circle cx="80" cy="150" r="60" fill="none" stroke="rgba(160,170,185,0.30)" stroke-width="0.8" stroke-dasharray="3 3"/>
+            <circle cx="80" cy="150" r="28" fill="none" stroke="rgba(160,170,185,0.30)" stroke-width="0.8" stroke-dasharray="3 3"/>
+            <text x="80" y="252" fill="#7a7060" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">p(ε) = 𝒩(0, I)</text>
+
+            <!-- Replicas (cold→hot ladder) in source -->
+            <g>
+              <circle cx="62" cy="138" r="5" fill="#c86888"/>
+              <circle cx="92" cy="118" r="5" fill="#b08aaa"/>
+              <circle cx="110" cy="172" r="5" fill="#7a9cb6"/>
+              <circle cx="48" cy="178" r="5" fill="#5a94c4"/>
+            </g>
+            <text x="62" y="128" fill="#c86888" font-size="9" font-family="Inter, sans-serif" text-anchor="middle">β₁</text>
+            <text x="92" y="108" fill="#b08aaa" font-size="9" font-family="Inter, sans-serif" text-anchor="middle">β₂</text>
+            <text x="116" y="186" fill="#7a9cb6" font-size="9" font-family="Inter, sans-serif" text-anchor="start">β₃</text>
+            <text x="44" y="192" fill="#5a94c4" font-size="9" font-family="Inter, sans-serif" text-anchor="end">β₄</text>
+
+            <!-- Generator arrow + label -->
+            <line x1="180" y1="150" x2="295" y2="150" stroke="rgba(122,112,96,0.85)" stroke-width="1.6" marker-end="url(#arrow)"/>
+            <rect x="200" y="132" width="76" height="36" rx="6" fill="rgba(255,255,255,0.85)" stroke="rgba(122,112,96,0.55)" stroke-width="1"/>
+            <text x="238" y="148" fill="#5a4f3f" font-size="13" font-family="Inter, sans-serif" text-anchor="middle" font-weight="600">G_θ</text>
+            <text x="238" y="162" fill="#7a7060" font-size="9" font-family="Inter, sans-serif" text-anchor="middle">forward pass</text>
+
+            <!-- Output panel (right): reward heatmap with target manifold ribbon -->
+            <rect x="305" y="62" width="150" height="180" rx="6" fill="url(#reward-grad)" stroke="rgba(160,170,185,0.45)" stroke-width="1"/>
+            <!-- Reward contour lines (decorative) -->
+            <path d="M 315 220 Q 360 180 400 200 T 450 170" fill="none" stroke="rgba(200,104,136,0.35)" stroke-width="1"/>
+            <path d="M 312 195 Q 355 150 395 170 T 452 140" fill="none" stroke="rgba(200,104,136,0.45)" stroke-width="1"/>
+            <path d="M 318 165 Q 360 120 395 138 T 450 110" fill="none" stroke="rgba(230,180,90,0.55)" stroke-width="1"/>
+            <path d="M 330 130 Q 365 95 395 105 T 445 85" fill="none" stroke="rgba(230,180,90,0.75)" stroke-width="1"/>
+
+            <!-- Target manifold ribbon -->
+            <path d="M 315 215 C 345 165, 395 150, 450 95" fill="none" stroke="rgba(122,112,96,0.55)" stroke-width="2.2" stroke-dasharray="5 3"/>
+
+            <!-- Mapped replica samples on the manifold (matching colors) -->
+            <circle cx="345" cy="180" r="5" fill="#c86888"/>
+            <circle cx="375" cy="155" r="5" fill="#b08aaa"/>
+            <circle cx="405" cy="135" r="5" fill="#7a9cb6"/>
+            <circle cx="430" cy="110" r="5" fill="#5a94c4"/>
+
+            <text x="380" y="258" fill="#7a7060" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">target manifold &amp; reward r(x)</text>
+            <text x="450" y="80" fill="#b89055" font-size="9" font-family="Inter, sans-serif" text-anchor="end" font-weight="600">high r</text>
+            <text x="316" y="232" fill="#7a9cb6" font-size="9" font-family="Inter, sans-serif" text-anchor="start" font-weight="600">low r</text>
+
+            <!-- Feedback loop: reward back to MCMC in source -->
+            <path d="M 380 270 C 380 320, 80 320, 80 270" fill="none" stroke="rgba(230,180,90,0.95)" stroke-width="1.6" stroke-dasharray="5 3" marker-end="url(#arrow-gold)"/>
+            <rect x="170" y="298" width="120" height="28" rx="6" fill="rgba(255,255,255,0.92)" stroke="rgba(230,180,90,0.85)" stroke-width="1"/>
+            <text x="230" y="316" fill="#7a5f30" font-size="11" font-family="Inter, sans-serif" text-anchor="middle">R(ε) = 𝔼[r(x)] → MH</text>
+
+            <!-- Caption row -->
+            <text x="80" y="346" fill="#7a7060" font-size="9.5" font-family="Inter, sans-serif" text-anchor="middle">PT MCMC explores ε</text>
+            <text x="380" y="346" fill="#7a7060" font-size="9.5" font-family="Inter, sans-serif" text-anchor="middle">scored on outputs</text>
+          </svg>
+        </div>
+        <div class="equation-card__content">
+          <h2>Mathematics</h2>
+          <p>Let $G_\theta : \epsilon \mapsto x$ be the pretrained generator with source prior $\epsilon \sim \mathcal{N}(0, I)$, and let $r(x)$ be a reward consistent with the steering target. The induced reward on the source is</p>
+          <div class="equation-block">
+            $$R(\epsilon) \;=\; \mathbb{E}_{x \sim G_\theta(\epsilon)}\!\bigl[\, r(x) \,\bigr],$$
+          </div>
+          <p>which requires running the generator forward at every candidate $\epsilon$. We sample the steered source distribution</p>
+          <div class="equation-block">
+            $$\pi(\epsilon) \;\propto\; p(\epsilon)\, \exp\!\bigl(R(\epsilon)\bigr)$$
+          </div>
+          <p>using Parallel Tempering MCMC. A ladder of replicas $\epsilon^{(1)}, \dots, \epsilon^{(K)}$ targets tempered densities $\pi_k(\epsilon) \propto p(\epsilon)\, \exp(\beta_k R(\epsilon))$ with inverse temperatures $\beta_1 > \cdots > \beta_K$. Adjacent replicas propose swaps accepted with</p>
+          <div class="equation-block">
+            $$\alpha = \min\!\left\{ 1,\; \exp\!\bigl[(\beta_k - \beta_{k+1})\bigl(R(\epsilon^{(k+1)}) - R(\epsilon^{(k)})\bigr)\bigr] \right\}.$$
+          </div>
+          <p>Hot chains tunnel through low-reward barriers; cold chains exploit high-reward modes. Pushing the cold chain through $G_\theta$ yields steered samples without ever retraining the generator.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section class="project-section project-section--results reveal">
+    <div class="results-container">
+      <h2>Results</h2>
+      <p class="results-description">Steering Stable Diffusion v1.4 with a human-preference reward. For each prompt, we compare unsteered base samples (left) against samples drawn from the steered source distribution via SPT (right). SPT concentrates mass on high-reward outputs without retraining the generator.</p>
+
+      <figure class="steering-figure">
+        <div class="steering-grid">
+          <div class="steering-col-label">Base Stable Diffusion</div>
+          <div class="steering-col-label">SPT (ours)</div>
+          <img src="../assets/steering/base_1.png" alt="Base Stable Diffusion, prompt 1" class="steering-img">
+          <img src="../assets/steering/spt_1.png" alt="SPT, prompt 1" class="steering-img">
+          <img src="../assets/steering/base_2.png" alt="Base Stable Diffusion, prompt 2" class="steering-img">
+          <img src="../assets/steering/spt_2.png" alt="SPT, prompt 2" class="steering-img">
+        </div>
+        <figcaption class="caption muted">
+          Prompt 1: <em>portrait of an old sea captain, detailed face, fantasy, cinematic, art painting by greg rutkowski.</em>
+          Prompt 2: <em>extremely detailed stunning beautiful futuristic smooth curvilinear museum interior, colorful, hyper, real.</em>
+        </figcaption>
+      </figure>
+
+      <figure class="steering-figure steering-figure--plot">
+        <img src="../assets/steering/wasserstein.png" alt="Wasserstein distance vs reward-peak width" class="steering-plot">
+        <figcaption class="caption muted">
+          Quantitative comparison on a 1D analytic benchmark: 2-Wasserstein distance between the sampled and exact reward-tilted distribution, as the reward peak sharpens ($\omega^2$ decreases). The baseline shown is FK Steering &mdash; the prior state-of-the-art gradient-free method &mdash; whose error grows sharply as the target concentrates in low-probability regions. SPT remains stable across the full range.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Why It Matters -->
+  <section class="project-section project-section--impact reveal">
+    <div class="impact-container">
+      <h2>Why It Matters</h2>
+      <div class="impact-grid">
+        <div class="impact-item">Conditional generation</div>
+        <div class="impact-item">Image editing</div>
+        <div class="impact-item">Constrained optimization</div>
+        <div class="impact-item">Safe generation</div>
+        <div class="impact-item">Reward-guided sampling</div>
+        <div class="impact-item">Multi-objective control</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Links -->
+  <section class="project-section project-section--links reveal">
+    <div class="links-container">
+      <h2>Resources</h2>
+      <div class="link-grid">
+        <a href="https://openreview.net/forum?id=5jGcYMUZx1" class="link-card" target="_blank" rel="noopener">Paper (ICML 2026)</a>
+        <a href="https://github.com/Utah-Math-Data-Science/SPT" class="link-card" target="_blank" rel="noopener">Code</a>
+        <!-- <a href="#" class="link-card">arXiv</a> -->
+        <!-- <a href="#" class="link-card">Poster</a> -->
+        <!-- <a href="#" class="link-card">Slides</a> -->
+      </div>
+    </div>
+  </section>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/project-steering-tempering.js"></script>
+</body>
+</html>

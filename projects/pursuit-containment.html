@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cooperative Pursuit & Containment — Drake Brown</title>
+  <meta name="description" content="Optimal control of pursuit agents corralling targets to the origin via repulsive interactions and iterative LQR.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>∂</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body class="project-page">
+
+  <nav class="project-nav">
+    <a href="../index.html#projects" class="back-link">&larr; Back to Portfolio</a>
+    <span class="project-nav__title">Pursuit & Containment</span>
+  </nav>
+
+  <!-- Hero -->
+  <section class="project-hero">
+    <div class="canvas-placeholder canvas-placeholder--full" aria-hidden="true">
+      <canvas data-canvas-id="pursuit-hero"></canvas>
+    </div>
+    <div class="project-hero__overlay">
+      <h1>Cooperative Pursuit &amp; Containment</h1>
+      <p class="project-hero__tagline">Optimal control of pursuit agents corralling targets to the origin under repulsive particle dynamics.</p>
+    </div>
+  </section>
+
+  <!-- Intuition -->
+  <section class="project-section project-section--intuition reveal">
+    <div class="project-section__grid">
+      <div class="project-section__text">
+        <h2>Intuition</h2>
+        <p><strong>Goal:</strong> compute trajectories for a small team of pursuit agents that drive a swarm of evading targets to a goal region (the origin), where the targets follow nonlinear repulsive dynamics and cannot be controlled directly &mdash; only nudged through the pursuers' positions.</p>
+        <p>Consider a group of autonomous pursuit agents (shepherds) tasked with driving a swarm of evading targets (sheep) toward a goal region. Targets don't follow commands — they simply flee from nearby pursuers via short-range repulsive forces.</p>
+        <p>The challenge is cooperative: pursuers must coordinate their positions so that the net repulsive field experienced by the swarm points toward the origin. Poor coordination scatters the targets; good coordination funnels them inward.</p>
+        <p>We solve this as an optimal control problem using iterative LQR (iLQR), linearizing the nonlinear repulsive dynamics at each step and computing locally optimal pursuit trajectories that successfully contain and guide the swarm.</p>
+      </div>
+      <div class="project-section__visual">
+        <!-- Static diagram: pursuers surrounding targets -->
+        <svg viewBox="0 0 300 280" fill="none" xmlns="http://www.w3.org/2000/svg" class="pipeline-diagram" role="img" aria-label="Pursuit agents surrounding target particles near origin">
+          <!-- Target region (origin) -->
+          <circle cx="150" cy="140" r="35" stroke="rgba(122,112,96,0.3)" stroke-width="1" stroke-dasharray="4 3" fill="rgba(122,112,96,0.04)"/>
+          <circle cx="150" cy="140" r="3" fill="rgba(122,112,96,0.5)"/>
+
+          <!-- Targets (rose) clustered near center -->
+          <circle cx="140" cy="130" r="6" fill="#5a94c4"/>
+          <circle cx="158" cy="125" r="6" fill="#5a94c4"/>
+          <circle cx="145" cy="148" r="6" fill="#5a94c4"/>
+          <circle cx="162" cy="142" r="6" fill="#5a94c4"/>
+          <circle cx="135" cy="145" r="6" fill="#5a94c4"/>
+          <circle cx="155" cy="155" r="6" fill="#5a94c4"/>
+          <circle cx="148" cy="135" r="6" fill="#5a94c4"/>
+
+          <!-- Pursuers (teal) surrounding -->
+          <circle cx="70" cy="80" r="7" fill="#c86888"/>
+          <circle cx="230" cy="80" r="7" fill="#c86888"/>
+          <circle cx="60" cy="200" r="7" fill="#c86888"/>
+          <circle cx="240" cy="200" r="7" fill="#c86888"/>
+
+          <!-- Repulsive arrows from pursuers toward targets -->
+          <line x1="82" y1="90" x2="125" y2="120" stroke="rgba(200, 104, 136,0.4)" stroke-width="1.2" stroke-dasharray="3 2"/>
+          <line x1="218" y1="90" x2="175" y2="120" stroke="rgba(200, 104, 136,0.4)" stroke-width="1.2" stroke-dasharray="3 2"/>
+          <line x1="72" y1="190" x2="125" y2="155" stroke="rgba(200, 104, 136,0.4)" stroke-width="1.2" stroke-dasharray="3 2"/>
+          <line x1="228" y1="190" x2="175" y2="155" stroke="rgba(200, 104, 136,0.4)" stroke-width="1.2" stroke-dasharray="3 2"/>
+
+          <!-- Legend -->
+          <circle cx="60" cy="255" r="5" fill="#c86888"/>
+          <text x="72" y="259" fill="#b0a890" font-size="10" font-family="Inter, sans-serif">Pursuer</text>
+          <circle cx="150" cy="255" r="5" fill="#5a94c4"/>
+          <text x="162" y="259" fill="#b0a890" font-size="10" font-family="Inter, sans-serif">Target</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mathematics -->
+  <section class="project-section project-section--math reveal">
+    <div class="equation-card">
+      <div class="equation-card__inner">
+        <div class="equation-card__canvas">
+          <!-- Repulsive field diagram: target with rings + pursuer with force vector -->
+          <svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg" class="pipeline-diagram" role="img" aria-label="Inverse-square repulsive field from pursuer acting on target">
+            <defs>
+              <marker id="arrowTeal" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="#c86888"/>
+              </marker>
+            </defs>
+
+            <!-- Repulsive field rings around pursuer (fading outward) -->
+            <circle cx="100" cy="170" r="30" stroke="rgba(200, 104, 136,0.35)" stroke-width="1" fill="none"/>
+            <circle cx="100" cy="170" r="55" stroke="rgba(200, 104, 136,0.22)" stroke-width="1" fill="none"/>
+            <circle cx="100" cy="170" r="85" stroke="rgba(200, 104, 136,0.12)" stroke-width="1" fill="none"/>
+            <circle cx="100" cy="170" r="120" stroke="rgba(200, 104, 136,0.06)" stroke-width="1" fill="none"/>
+
+            <!-- Pursuer (teal) -->
+            <circle cx="100" cy="170" r="10" fill="#c86888"/>
+            <text x="100" y="200" fill="#b0a890" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">p</text>
+
+            <!-- Force vector: pursuer → target direction -->
+            <line x1="155" y1="145" x2="210" y2="118" stroke="#c86888" stroke-width="2" marker-end="url(#arrowTeal)"/>
+
+            <!-- Target (rose) being pushed away -->
+            <circle cx="230" cy="105" r="9" fill="#5a94c4"/>
+            <text x="230" y="90" fill="#b0a890" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">x</text>
+
+            <!-- Force label -->
+            <text x="195" y="118" fill="#c86888" font-size="10" font-family="Inter, sans-serif" text-anchor="end">F &prop; 1/r&sup2;</text>
+
+            <!-- r distance label -->
+            <line x1="108" y1="165" x2="222" y2="110" stroke="rgba(122,112,96,0.3)" stroke-width="1" stroke-dasharray="3 2"/>
+            <text x="172" y="150" fill="#7a7060" font-size="10" font-family="Inter, sans-serif" text-anchor="middle" transform="rotate(-24, 172, 150)">r</text>
+          </svg>
+        </div>
+        <div class="equation-card__content">
+          <h2>Mathematics</h2>
+          <p>Targets are repelled from pursuers by an inverse-square force, giving nonlinear dynamics $x_{t+1} = F(x_t, u_t)$ with</p>
+          <div class="equation-block">
+            $$F_i = \sum_{j} \frac{x_i - p_j}{\|x_i - p_j\|^3}.$$
+          </div>
+          <p>At each step we linearize $F$ around the nominal trajectory $(\bar{x}_t, \bar{u}_t)$, taking Jacobians $A_t = \partial F/\partial x$ and $B_t = \partial F/\partial u$, and solve a quadratic LQR problem on the resulting local linear system. The optimal cost-to-go $V_t(x) = x^\top P_t x$ is found by sweeping the discrete-time Riccati equation backward:</p>
+          <div class="equation-block">
+            $$P_t = Q + A_t^\top P_{t+1} A_t - A_t^\top P_{t+1} B_t \bigl(R + B_t^\top P_{t+1} B_t\bigr)^{-1} B_t^\top P_{t+1} A_t.$$
+          </div>
+          <p>The feedback law $u_t^\star = -K_t x_t$ is read off from $P_{t+1}$. Iterating&mdash;re-linearize, re-solve, roll forward&mdash;converges to a locally optimal trajectory that corrals the targets to the origin.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section class="project-section project-section--results reveal">
+    <div class="results-container">
+      <h2>Results</h2>
+      <p class="results-description">Two pursuit agents corral two targets to the origin. The iLQR controller computes efficient trajectories that coordinate the pursuers without scattering the targets.</p>
+      <div class="results-comparison">
+        <video loop muted playsinline class="section-video lazy-video" style="width:100%; border-radius: var(--radius-md); aspect-ratio: 2/1; object-fit: contain; background: var(--bg-primary);">
+          <source src="../assets/3_example_1.mp4" type="video/mp4">
+        </video>
+        <video loop muted playsinline class="section-video lazy-video" style="width:100%; border-radius: var(--radius-md); aspect-ratio: 2/1; object-fit: contain; background: var(--bg-primary); margin-top: var(--space-md);">
+          <source src="../assets/3_example_2.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why It Matters -->
+  <section class="project-section project-section--impact reveal">
+    <div class="impact-container">
+      <h2>Why It Matters</h2>
+      <div class="impact-grid">
+        <div class="impact-item">Multi-robot coordination</div>
+        <div class="impact-item">Swarm control</div>
+        <div class="impact-item">Nonlinear optimal control</div>
+        <div class="impact-item">Crowd management</div>
+        <div class="impact-item">Wildlife herding</div>
+        <div class="impact-item">Autonomous vehicles</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Links -->
+  <section class="project-section project-section--links reveal">
+    <div class="links-container">
+      <h2>Resources</h2>
+      <div class="link-grid">
+        <a href="https://arxiv.org/abs/2510.25115" class="link-card" target="_blank" rel="noopener">arXiv</a>
+        <a href="https://github.com/brownthesr/Optimal_Paths" class="link-card" target="_blank" rel="noopener">Code</a>
+      </div>
+    </div>
+  </section>
+
+  <script src="../js/main.js"></script>
+  <script>
+    (function() {
+      var videos = document.querySelectorAll('.lazy-video');
+      if (!videos.length) return;
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.play();
+          } else {
+            entry.target.pause();
+          }
+        });
+      }, { threshold: 0.25 });
+      videos.forEach(function(v) { observer.observe(v); });
+    })();
+  </script>
+</body>
+</html>

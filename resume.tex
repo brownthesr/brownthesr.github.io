@@ -1,0 +1,118 @@
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage[margin=0.75in]{geometry}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{parskip}
+
+\hypersetup{
+  colorlinks=true,
+  urlcolor=black,
+  linkcolor=black
+}
+
+% Section heading styling: small caps, rule underneath
+\titleformat{\section}
+  {\large\scshape\raggedright}
+  {}{0em}
+  {}[\vspace{-6pt}\titlerule\vspace{2pt}]
+\titlespacing*{\section}{0pt}{10pt}{4pt}
+
+% Tight lists
+\setlist[itemize]{leftmargin=*, topsep=2pt, itemsep=1pt, parsep=0pt}
+\setlist[enumerate]{leftmargin=*, topsep=2pt, itemsep=1pt, parsep=0pt}
+
+\pagestyle{empty}
+
+% A small helper for two-column rows (left bold, right italic, right-aligned)
+\newcommand{\entry}[4]{%
+  \noindent\begin{tabularx}{\textwidth}{@{}X r@{}}
+    \textbf{#1} & \textit{#2} \\
+    \textit{#3} & #4 \\
+  \end{tabularx}\vspace{2pt}
+}
+
+\begin{document}
+
+%====== Header ======
+\begin{center}
+  {\LARGE \textbf{Drake Brown}}\\[2pt]
+  \href{mailto:Drakebenbrown@gmail.com}{Drakebenbrown@gmail.com} \, \textbar\, \href{https://www.linkedin.com/in/drake-brown-5398b9224}{linkedin.com/in/drake-brown} \, \textbar\, \href{https://github.com/brownthesr}{github.com/brownthesr} \, \textbar\, \href{https://scholar.google.com/citations?user=BEqMd74AAAAJ}{Google Scholar}
+\end{center}
+
+%====== Education ======
+\section*{Education}
+
+\entry{PhD, Applied Mathematics}{April 2029}
+      {University of Utah \, \textbullet\, Advisor: Bao Wang}{Salt Lake City, UT}
+\vspace{-4pt}
+\begin{itemize}
+  \item Qualifying Exam Topics: ODEs, PDEs, Linear Models, Functional Analysis, Numerical Analysis
+  \item GPA: 4.00
+\end{itemize}
+
+\entry{BS, Applied \& Computational Mathematics (ACME), CS Minor}{April 2025}
+      {Brigham Young University \, \textbullet\, Concentration: Deep Learning}{Provo, UT}
+\vspace{-4pt}
+\begin{itemize}
+  \item Major GPA: 4.00
+  \item Relevant Coursework:
+\end{itemize}
+\vspace{-8pt}
+\noindent\begin{tabularx}{\textwidth}{XXX}
+  Advanced Deep Learning      & Mathematics of Deep Learning      & Stochastic Differential Equations \\
+  Linear \& Nonlinear Analysis & Modeling with Uncertainty in Data & Algorithm Design \& Optimization \\
+  Dynamics \& Control Theory   & Advanced Programming Concepts     & \\
+\end{tabularx}
+
+%====== Publications ======
+\section*{Publications}
+
+\begin{enumerate}
+  \item \textbf{D.~Brown}, T.~Garrity, K.~Parker, J.~Oliphant, S.~Carson, C.~Hanson, Z.~Boyd. ``Beyond Linear: A Theoretical and Empirical Analysis of Nonlinear GNNs for Community Detection.'' \textit{SIAM Journal on Applied Mathematics}, in press (2026). \textbf{First author.}
+  \item J.~Keller, \ldots, \textbf{D.~Brown}. ``Test-Time Guidance for Flow-Based Generative Models via Parallel Tempering on Source Distributions.'' \textit{International Conference on Machine Learning (ICML)}, 2026. Accepted.
+  \item \textbf{D.~Brown}, T.~Garrity, D.~Perkins, D.~Hunter, W.~Pochman. ``Optimal Control for Multi-Agent Sheep Herding.'' \texttt{arXiv:2510.25115}, 2025. \textbf{First author.}
+  \item \textbf{D.~Brown}, D.~Perkins, D.~Hunter, T.~Garrity, W.~Pochman. ``Epidemiological Dynamics across Multiple Population Hubs.'' \texttt{arXiv:2510.25085}, 2025. \textbf{First author.}
+  \item Manuscript under review at \textit{NeurIPS} 2026.
+\end{enumerate}
+
+%====== Skills ======
+\section*{Skills}
+
+\noindent\begin{tabularx}{\textwidth}{@{}l X@{}}
+  \textbf{Languages} & Python (PyTorch, Lightning, PyTorch Geometric, NumPy, Pandas), C++, Java, Rust, SQL, Bash \\
+  \textbf{Topics}    & Generative Models, Graph Neural Networks, Neural ODEs, Equivariant Deep Learning, Optimal Control, Stochastic Differential Equations, Numerical Linear Algebra, Multi-Agent Systems \\
+\end{tabularx}
+
+%====== Experience ======
+\section*{Experience}
+
+\entry{AWS Applied Scientist Intern}{May -- August 2026}
+      {Kiro Science, Amazon}{Santa Clara, CA}
+\vspace{-4pt}
+\begin{itemize}
+  \item Designed and shipped a self-improving multi-agent adversarial framework for measuring Agent-as-a-Judge robustness; taxonomized 6 attack-class biases and demonstrated cross-model judge vulnerability transfer.
+\end{itemize}
+
+\entry{AWS Software Engineering Intern}{Jun--Aug 2024; May--Aug 2025}
+      {API Gateway, Amazon}{Denver, CO}
+\vspace{-4pt}
+\begin{itemize}
+  \item Re-architected Private API ingress by removing the NGINX proxy layer and implementing direct traffic handling
+  \item Designed and deployed an isolation fleet to mitigate large-scale DDoS attacks across 300K+ accounts
+  \item Increased successful API transactions by 30\% via dynamic routing and system-level optimization
+  \item Reduced p99 latency from 2000\,ms to 20\,ms under adversarial load
+\end{itemize}
+
+\entry{Research Assistant Lead}{February 2022 -- April 2025}
+      {Graph Neural Networks Lab \, \textbullet\, Brigham Young University}{Provo, UT}
+\vspace{-4pt}
+\begin{itemize}
+  \item Led large-scale experimentation training 200+ GNN models in parallel (15M+ data points) using PyTorch
+  \item Invited talk at SIAM-NSS; accepted paper to \textit{SIAM Journal on Applied Mathematics}
+\end{itemize}
+
+\end{document}

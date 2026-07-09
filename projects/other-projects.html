@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Other Projects — Drake Brown</title>
+  <meta name="description" content="Additional projects by Drake Brown spanning multi-agent reinforcement learning, generative music modeling, and NLP for ancient texts.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>∂</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="project-page">
+
+  <nav class="project-nav">
+    <a href="../index.html#projects" class="back-link">&larr; Back to Portfolio</a>
+    <span class="project-nav__title">Other Projects</span>
+  </nav>
+
+  <main>
+    <section id="projects" class="reveal" style="padding-top: var(--space-xl);">
+      <div class="container">
+        <span class="section-label">Other Projects</span>
+        <h2 class="section-title">More selected work</h2>
+        <p class="section-hint">Side projects spanning multi-agent learning, generative audio, and computational humanities.</p>
+        <div class="projects-grid projects-grid--uniform reveal-children">
+
+          <div class="project-card project-card--static">
+            <div class="project-card__canvas">
+              <div class="canvas-placeholder" aria-hidden="true">
+                <canvas data-canvas-id="project-prisoners"></canvas>
+              </div>
+            </div>
+            <div class="project-card__content">
+              <h3 class="project-card__title">Multi-Agent Prisoner's Dilemma Dynamics</h3>
+              <p class="project-card__subtitle">Trained populations of agents in parallel via gradient descent on reward, with memory of past interactions — producing emergent gradient dynamics over strategies.</p>
+              <p class="project-card__result"><strong>Result:</strong> cooperative coalitions periodically emerged, but the system most often collapsed to universal defection. This convergence to a globally non-optimal equilibrium is consistent with running a local optimizer (gradient descent) over decentralized agents — each agent climbs its own reward landscape with no mechanism to escape the socially suboptimal basin.</p>
+              <div class="project-card__tags">
+                <span class="tag">Multi-Agent RL</span>
+                <span class="tag">Gradient Dynamics</span>
+                <span class="tag">Game Theory</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card project-card--static">
+            <div class="project-card__canvas">
+              <div class="canvas-placeholder" aria-hidden="true">
+                <canvas data-canvas-id="project-music"></canvas>
+              </div>
+            </div>
+            <div class="project-card__content">
+              <h3 class="project-card__title">Music Transformer for Genre Interpolation</h3>
+              <p class="project-card__subtitle">Trained a transformer on instrumental scores to generate new pieces and interpolate between musical genres in latent space.</p>
+              <p class="project-card__result"><strong>Result:</strong> the model produced coherent instrumental scores and smooth genre crossfades — interpolating along latent directions yielded pieces that audibly drifted from one genre's rhythmic and harmonic style to another rather than collapsing to a single mode.</p>
+              <div class="project-card__tags">
+                <span class="tag">Transformers</span>
+                <span class="tag">Generative Audio</span>
+                <span class="tag">Latent Interpolation</span>
+              </div>
+              <a href="https://github.com/brownthesr/Music-Interpolation" class="project-card__code" target="_blank" rel="noopener">Code &rarr;</a>
+            </div>
+          </div>
+
+          <div class="project-card project-card--static">
+            <div class="project-card__canvas">
+              <div class="canvas-placeholder" aria-hidden="true">
+                <canvas data-canvas-id="project-ancient-texts"></canvas>
+              </div>
+            </div>
+            <div class="project-card__content">
+              <h3 class="project-card__title">Semantic Search &amp; Manifolds of Ancient Texts</h3>
+              <p class="project-card__subtitle">Built a contextual topic-similarity search over ancient texts using sentence transformers, then analyzed the embedding manifold across corpora.</p>
+              <p class="project-card__result"><strong>Result:</strong> embeddings clustered by theme rather than by source text, revealing low-dimensional structure that connected passages across different works on shared topics — and the manifold's geometry exposed which corpora occupied overlapping vs. distinct regions of conceptual space. The same embeddings were also discriminative enough to identify authorship on their own, separating writers cleanly even without explicit stylometric features.</p>
+              <div class="project-card__tags">
+                <span class="tag">Sentence Transformers</span>
+                <span class="tag">NLP</span>
+                <span class="tag">Manifold Learning</span>
+              </div>
+              <a href="https://github.com/brownthesr/Exegesis-of-Ancient-Texts" class="project-card__code" target="_blank" rel="noopener">Code &rarr;</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="../index.html" class="footer-link">Home</a>
+          <a href="mailto:u1221123@umail.utah.edu" class="footer-link">Email</a>
+          <a href="https://github.com/brownthesr" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+        </div>
+        <p class="footer-copy">Drake Brown &middot; University of Utah &middot; Applied Mathematics</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/project-prisoners.js"></script>
+  <script src="../js/project-music.js"></script>
+  <script src="../js/project-ancient-texts.js"></script>
+</body>
+</html>
